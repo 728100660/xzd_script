@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    @font-face {
+        font-family: "STSong-Light";
+    }
+    body {
+        font-family: "STSong-Light";
+    }
+    h1, h2, h3 {
+      color: #005599;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 1em;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    pre {
+      background: #f8f8f8;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    details {
+      display: block;
+      margin-bottom: 1em;
+    }
+
+    details summary {
+      display: none; /* 隐藏 summary，让内容看起来是直接展开的 */
+    }
+    details[open] {
+      /* 默认样式下 details 是展开状态 */
+      /* 这里不需要额外写什么，只要 open 存在，内容就显示 */
+    }
+  </style>
+
+  <!-- 加载 MathJax -->
+  <script type="text/javascript" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- 展开所有 <details> -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll("details").forEach(d => d.setAttribute("open", ""));
+    });
+  </script>
+</head>
+<body>
+  {{ content }}
+</body>
+</html>
