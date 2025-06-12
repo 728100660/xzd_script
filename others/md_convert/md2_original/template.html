@@ -6,43 +6,22 @@
     @font-face {
         font-family: "STSong-Light";
     }
+    @page {
+        size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {          /* Content Frame */
+            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
     body {
-        font-family: "STSong-Light";
-    }
-    h1, h2, h3 {
-      color: #005599;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 1em;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-    pre {
-      background: #f8f8f8;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-x: auto;
-    }
-    code {
-      background: #eee;
-      padding: 2px 4px;
-      border-radius: 3px;
-    }
-    details {
-      display: block;
-      margin-bottom: 1em;
-    }
-
-    details summary {
-      display: none; /* 隐藏 summary，让内容看起来是直接展开的 */
-    }
-    details[open] {
-      /* 默认样式下 details 是展开状态 */
-      /* 这里不需要额外写什么，只要 open 存在，内容就显示 */
+      font-family: "Noto Sans", "Microsoft YaHei", sans-serif, "STSong-Light";
     }
   </style>
 
