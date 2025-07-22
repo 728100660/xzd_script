@@ -1,0 +1,15 @@
+table_name,columns
+territories,territory_id:VARCHAR(20):NOT NULL:PK; territory_description:VARCHAR(60):NOT NULL; region_id:SMALLINT:NOT NULL
+order_details,order_id:SMALLINT:NOT NULL:PK; product_id:SMALLINT:NOT NULL:PK; unit_price:REAL:NOT NULL; quantity:SMALLINT:NOT NULL; discount:REAL:NOT NULL
+employee_territories,employee_id:SMALLINT:NOT NULL:PK; territory_id:VARCHAR(20):NOT NULL:PK
+us_states,state_id:SMALLINT:NOT NULL:PK; state_name:VARCHAR(100):NULL; state_abbr:VARCHAR(2):NULL; state_region:VARCHAR(50):NULL
+customers,customer_id:VARCHAR(5):NOT NULL:PK; company_name:VARCHAR(40):NOT NULL; contact_name:VARCHAR(30):NULL; contact_title:VARCHAR(30):NULL; address:VARCHAR(60):NULL; city:VARCHAR(15):NULL; region:VARCHAR(15):NULL; postal_code:VARCHAR(10):NULL; country:VARCHAR(15):NULL; phone:VARCHAR(24):NULL; fax:VARCHAR(24):NULL
+orders,order_id:SMALLINT:NOT NULL:PK; customer_id:VARCHAR(5):NULL; employee_id:SMALLINT:NULL; order_date:DATE:NULL; required_date:DATE:NULL; shipped_date:DATE:NULL; ship_via:SMALLINT:NULL; freight:REAL:NULL; ship_name:VARCHAR(40):NULL; ship_address:VARCHAR(60):NULL; ship_city:VARCHAR(15):NULL; ship_region:VARCHAR(15):NULL; ship_postal_code:VARCHAR(10):NULL; ship_country:VARCHAR(15):NULL
+employees,employee_id:SMALLINT:NOT NULL:PK; last_name:VARCHAR(20):NOT NULL; first_name:VARCHAR(10):NOT NULL; title:VARCHAR(30):NULL; title_of_courtesy:VARCHAR(25):NULL; birth_date:DATE:NULL; hire_date:DATE:NULL; address:VARCHAR(60):NULL; city:VARCHAR(15):NULL; region:VARCHAR(15):NULL; postal_code:VARCHAR(10):NULL; country:VARCHAR(15):NULL; home_phone:VARCHAR(24):NULL; extension:VARCHAR(4):NULL; photo:BYTEA:NULL; notes:TEXT:NULL; reports_to:SMALLINT:NULL; photo_path:VARCHAR(255):NULL
+shippers,shipper_id:SMALLINT:NOT NULL:PK; company_name:VARCHAR(40):NOT NULL; phone:VARCHAR(24):NULL
+products,product_id:SMALLINT:NOT NULL:PK; product_name:VARCHAR(40):NOT NULL; supplier_id:SMALLINT:NULL; category_id:SMALLINT:NULL; quantity_per_unit:VARCHAR(20):NULL; unit_price:REAL:NULL; units_in_stock:SMALLINT:NULL; units_on_order:SMALLINT:NULL; reorder_level:SMALLINT:NULL; discontinued:INTEGER:NOT NULL
+categories,category_id:SMALLINT:NOT NULL:PK; category_name:VARCHAR(15):NOT NULL; description:TEXT:NULL; picture:BYTEA:NULL
+suppliers,supplier_id:SMALLINT:NOT NULL:PK; company_name:VARCHAR(40):NOT NULL; contact_name:VARCHAR(30):NULL; contact_title:VARCHAR(30):NULL; address:VARCHAR(60):NULL; city:VARCHAR(15):NULL; region:VARCHAR(15):NULL; postal_code:VARCHAR(10):NULL; country:VARCHAR(15):NULL; phone:VARCHAR(24):NULL; fax:VARCHAR(24):NULL; homepage:TEXT:NULL
+region,region_id:SMALLINT:NOT NULL:PK; region_description:VARCHAR(60):NOT NULL
+customer_demographics,customer_type_id:VARCHAR(5):NOT NULL:PK; customer_desc:TEXT:NULL
+customer_customer_demo,customer_id:VARCHAR(5):NOT NULL:PK; customer_type_id:VARCHAR(5):NOT NULL:PK
