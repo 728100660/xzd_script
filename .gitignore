@@ -130,3 +130,5 @@ datav3/tmp/
 /micro_grid/tests/tiem_test.py
 
 *~
+
+*.sqlite
