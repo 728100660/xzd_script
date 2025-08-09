@@ -1,4 +1,4 @@
-import psycopg2
+import pg8000
 
 BATCH_SIZE = 1000
 
@@ -7,7 +7,7 @@ DEV_PG_CONFIG = {
     "port": 5432,
     "user": "postgres",
     "password": "difyai123456",
-    "dbname": "brazilian_e_commerce"
+    "database": "brazilian_e_commerce"
 }
 
 TEST_PG_CONFIG = {
@@ -15,17 +15,17 @@ TEST_PG_CONFIG = {
     "port": 5433,
     "user": "postgres",
     "password": "difyai123456",
-    "dbname": "brazilian_e_commerce"
+    "database": "brazilian_e_commerce"
 }
 
 
 def get_connection(cfg):
-    return psycopg2.connect(
+    return pg8000.connect(
         host=cfg["host"],
         port=cfg["port"],
         user=cfg["user"],
         password=cfg["password"],
-        dbname=cfg["dbname"]
+        database=cfg["database"]
     )
 
 
@@ -38,7 +38,7 @@ def get_all_tables(cursor):
 
 
 def get_column_names(cursor, table):
-    cursor.execute(f"""
+    cursor.execute("""
         SELECT column_name FROM information_schema.columns
         WHERE table_schema='public' AND table_name=%s
         ORDER BY ordinal_position;
