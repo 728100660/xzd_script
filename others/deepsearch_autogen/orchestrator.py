@@ -8,7 +8,7 @@ from autogen_agentchat.ui import Console
 
 import asyncio
 
-from others.deepsearch_autogen.agents import build_agents
+from others.deepsearch_autogen.agents import build_agents, get_simple_research_agent
 
 
 def _default_model_list(model: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -54,8 +54,7 @@ def run_deepsearch(
         )
     )
 
-    config_list = _default_model_list(model)
-    agents = build_agents(config_list, model_client)
+    agents = build_agents(model_client)
     text_mention_termination = TextMentionTermination("TERMINATE")
     max_messages_termination = MaxMessageTermination(max_messages=max_rounds)
     termination = text_mention_termination | max_messages_termination
@@ -70,7 +69,24 @@ def run_deepsearch(
     asyncio.run(Console(team.run_stream(task=task)))
 
 
+def run_simple_search(task):
+    model_client = OpenAIChatCompletionClient(
+        # model="qwen3-235b-a22b-instruct-2507",
+        model="qwen3-235b-a22b-thinking-2507",
+        api_key="sk-c8331ffeed3444cd920ef20888560fcf",
+        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        model_info=ModelInfo(
+            vision=False, function_calling=True, json_output=True, structured_output=True, family=ModelFamily.ANY
+        )
+    )
+    search_agent = get_simple_research_agent(model_client)
+    result = asyncio.run(search_agent.run(task=task))
+    print(result)
+
+
+
 if __name__ == '__main__':
     # """python -m others.deepsearch_autogen.main "RAG 检索增强生成的评测指标有哪些？各自优缺点？" --rounds 10 --full"""
-    run_deepsearch("RAG 检索增强生成的评测指标有哪些？各自优缺点？")
+    # run_deepsearch("RAG 检索增强生成的评测指标有哪些？各自优缺点？")
+    run_simple_search("lpl最新赛事情况")
 

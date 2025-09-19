@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-import time
+import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -25,6 +25,13 @@ def web_search(query: str, max_results: int = 5, region: str = "wt-wt") -> List[
     except Exception:
         return []
     return results
+
+
+def get_current_time() -> str:
+    """
+    当用户问到模糊时间的时候，通过此工具获取当前时间来判断用户所问的具体时间是什么时候
+    """
+    return str(datetime.datetime.now())
 
 
 def fetch_page(url: str, timeout: int = 15, max_chars: int = 20000) -> Dict[str, Optional[str]]:

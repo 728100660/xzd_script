@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, send_file
 import os
 
 app = Flask(__name__)
-file_dir = r'D:\data\code\xzd_script\others\libreOffice\tmp'  # 替换为实际存储路径
+file_dir = r'C:\Users\pxz\data\code\xzd_script\others\libreOffice\tmp'  # 替换为实际存储路径
 
 @app.route('/wopi/files/<filename>', methods=['GET'])
 def check_file_info(filename):

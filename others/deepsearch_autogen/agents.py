@@ -4,7 +4,7 @@ from autogen_agentchat.agents import AssistantAgent
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 from . import prompts
-from .search import web_search, fetch_page
+from .search import web_search, fetch_page, get_current_time
 
 
 def _build_llm_config(config_list: List[Dict[str, Any]], temperature: float = 0.3, timeout: int = 120) -> Dict[str, Any]:
@@ -15,9 +15,21 @@ def _build_llm_config(config_list: List[Dict[str, Any]], temperature: float = 0.
     }
 
 
-def build_agents(config_list: List[Dict[str, Any]], model_client: OpenAIChatCompletionClient) -> Dict[str, Any]:
+def get_simple_research_agent(model_client: OpenAIChatCompletionClient):
+    tools = [web_search, fetch_page, get_current_time]
+    researcher = AssistantAgent(
+        name="Researcher",
+        model_client=model_client,
+        tools=tools,
+        system_message=prompts.RESEARCHER_SIMPLE_SYSTEM,
+        description="Researcher：使用工具进行网络搜索、查找来源、抽取文本、引用相关片段并附上 URL，每个来源提供简短总结。避免推测。"
+    )
+    return researcher
 
-    tools = [web_search, fetch_page]
+
+def build_agents(model_client: OpenAIChatCompletionClient) -> Dict[str, Any]:
+
+    tools = [web_search, fetch_page, get_current_time]
 
     planner = AssistantAgent(
         name="Planner",
