@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+<button id="start">开始录音</button>
+<button id="stop">停止录音</button>
+
+<script>
+let ws;
+let audioContext;
+let processor;
+
+document.getElementById("start").onclick = async () => {
+    ws = new WebSocket("ws://localhost:8080/ws/audio");
+    ws.binaryType = "arraybuffer";
+
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+
+    processor = audioContext.createScriptProcessor(4096, 1, 1);
+
+    processor.onaudioprocess = (e) => {
+        const input = e.inputBuffer.getChannelData(0); // Float32Array
+        const buffer = new ArrayBuffer(input.length * 2);
+        const view = new DataView(buffer);
+        for (let i = 0; i < input.length; i++) {
+            let s = Math.max(-1, Math.min(1, input[i]));
+            view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        }
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(buffer);
+        }
+    };
+
+    source.connect(processor);
+    processor.connect(audioContext.destination);
+};
+
+document.getElementById("stop").onclick = () => {
+    if (processor) processor.disconnect();
+    if (audioContext) audioContext.close();
+    if (ws) ws.close();
+};
+</script>
+</body>
+</html>

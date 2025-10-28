@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>🎙️ 实时ASR测试</h3>
+    <button id="start">开始录音</button>
+    <button id="stop">停止录音</button>
+    <pre id="log"></pre>
+
+    <script>
+      const ws = new WebSocket("ws://localhost:8000/ws/asr/test1");
+      const log = (t) => (document.getElementById("log").textContent += t + "\n");
+      let recorder, audioStream;
+
+      ws.onmessage = (e) => {
+        const msg = JSON.parse(e.data);
+        if (msg.type === "text") log("识别中: " + msg.data);
+        if (msg.type === "final_text") log("最终结果: " + msg.data);
+      };
+
+      document.getElementById("start").onclick = async () => {
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const context = new AudioContext({ sampleRate: 8000 });
+        log("🎤 采样率：" + context.sampleRate);
+        const source = context.createMediaStreamSource(audioStream);
+        const processor = context.createScriptProcessor(4096, 1, 1);
+        source.connect(processor);
+        processor.connect(context.destination);
+
+        processor.onaudioprocess = (e) => {
+          const inputData = e.inputBuffer.getChannelData(0);
+          const pcm16 = new Int16Array(inputData.length);
+          for (let i = 0; i < inputData.length; i++) {
+            pcm16[i] = Math.max(-1, Math.min(1, inputData[i])) * 0x7fff;
+          }
+          const base64Data = btoa(
+            String.fromCharCode(...new Uint8Array(pcm16.buffer))
+          );
+          ws.send(JSON.stringify({ type: "audio", data: base64Data }));
+        };
+        log("🎤 开始录音...");
+      };
+
+      document.getElementById("stop").onclick = () => {
+        if (audioStream) audioStream.getTracks().forEach((t) => t.stop());
+        ws.send(JSON.stringify({ type: "end" }));
+        log("🛑 停止录音");
+      };
+    </script>
+  </body>
+</html>
